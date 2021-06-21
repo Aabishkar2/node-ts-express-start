@@ -13,8 +13,7 @@ import os from "os";
 import helmet from "helmet";
 import queryStringParser from "./utils/queryStringParser";
 import useragent from "express-useragent";
-
-import routes from "./routes";
+import v1 from "./api/v1/routes";
 
 const exit = process.exit;
 
@@ -68,8 +67,7 @@ export default class ExpressServer {
 
   async listen(port?: number): Promise<Application | void> {
     try {
-      this.app.use(this.allowCrossDomain("*"));
-      this.app.use(routes);
+      this.app.use("/v1", this.allowCrossDomain("*"), v1);
       if (port != null) {
         http.createServer(this.app).listen(port, () => {
           console.log(`🚀🚀🚀 Running in port: ${port}`);
