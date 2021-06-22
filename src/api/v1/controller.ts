@@ -1,8 +1,43 @@
 import { Request, Response } from "express";
+import fetch from "node-fetch";
+import { todayPriceHeader } from "../../utils/headers";
 
 class Controller {
   async refresh(req: Request, res: Response): Promise<Response> {
     return res.json({ success: true });
+  }
+
+  async getTodayPrice(
+    req: Request & {
+      query: {
+        page?: number;
+        size?: number;
+        date?: string;
+      };
+    },
+    res: Response
+  ): Promise<Response> {
+    try {
+      const url =
+        "https://newweb.nepalstock.com/api/nots/nepse-data/today-price?" +
+        new URLSearchParams({
+          page: req.query.page.toString(),
+          size: req.query.size.toString(),
+          businessDate: req.query.date.toString(),
+        });
+      const options = {
+        method: "POST",
+        headers: todayPriceHeader,
+        body: JSON.stringify({
+          id: "238",
+        }),
+      };
+      const data = await fetch(url, options);
+      const resultJson = await data.json();
+      return res.json(resultJson);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

@@ -67,7 +67,7 @@ export default class ExpressServer {
 
   async listen(port?: number): Promise<Application | void> {
     try {
-      this.app.use("/v1", this.allowCrossDomain("*"), v1);
+      this.app.use("/api/v1", this.allowCrossDomain("*"), v1);
       if (port != null) {
         http.createServer(this.app).listen(port, () => {
           console.log(`🚀🚀🚀 Running in port: ${port}`);
