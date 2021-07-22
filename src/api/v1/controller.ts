@@ -18,18 +18,22 @@ class Controller {
     res: Response
   ): Promise<Response> {
     try {
+      let queryParam;
+      if (req.query) {
+        queryParam = new URLSearchParams({
+          page: req.query.page ? req.query.page.toString() : "",
+          size: req.query.size ? req.query.size.toString() : "",
+          businessDate: req.query.date ? req.query.date.toString() : "",
+        });
+      }
       const url =
         "https://newweb.nepalstock.com/api/nots/nepse-data/today-price?" +
-        new URLSearchParams({
-          page: req.query.page.toString(),
-          size: req.query.size.toString(),
-          businessDate: req.query.date.toString(),
-        });
+        queryParam;
       const options = {
         method: "POST",
         headers: todayPriceHeader,
         body: JSON.stringify({
-          id: "238",
+          id: "234",
         }),
       };
       const data = await fetch(url, options);
